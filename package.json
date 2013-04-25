@@ -1,0 +1,35 @@
+{
+  "name": "ghiraldi-schema-registry",
+  "description": "Creates a schema registry that can be used to store and retrieve Ghiraldi schemas.",
+  "tags": [
+    "jugglingdb",
+    "schema",
+    "registry",
+    "ghiraldi"
+  ],
+  "version": "0.0.6",
+  "author": {
+    "name": "John O'Connor",
+    "email": "sax1johno@gmail.com"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "main": "./lib/schema_registry",
+  "dependencies": {
+    "jugglingdb": "*",
+    "underscore": "*",
+    "nodeunit": "*"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "github.com/sax1johno/ghiraldi-schema-registry.git"
+  },
+  "_id": "ghiraldi-schema-registry@0.0.6",
+  "_from": "ghiraldi-schema-registry@*",
+  "readme": "ghiraldi-schema-registry\n========================\n\nCreates a schema registry that can be used to store and retrieve Ghiraldi schemas.",
+  "dist": {
+    "shasum": "2acf195182ad71a6eaa71f12d975801cb04b5261"
+  }
+}
