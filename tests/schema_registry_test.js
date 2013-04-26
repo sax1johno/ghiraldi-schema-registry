@@ -1,6 +1,7 @@
 var nodeunit = require('nodeunit'),
-    SchemaRegistry = require('../lib/schema_registry');
-
+    SchemaRegistry = require('../lib/schema_registry'),
+    _ = require('underscore');
+    
 exports.registryTest = nodeunit.testCase({
     'testConstructor': function(test) {
         var registry = new SchemaRegistry('memory');
@@ -8,11 +9,10 @@ exports.registryTest = nodeunit.testCase({
     },
     'testAdd': function(test) {
         var registry = new SchemaRegistry('memory');
-        var testSchema = registry.getSchema('t');
-        testSchema.extendModel('t', {
+        var testSchema = {
             title: String,
             test: String
-        });
+        };
         registry.add('t', testSchema, function(success) {
             test.ok(success, "Registration adding should've succceeded");
             registry.log(function(schemas) {
@@ -21,38 +21,68 @@ exports.registryTest = nodeunit.testCase({
             })
         })
     },
-    'testRemove': function(test) {
+    'testGetAndModify': function(test) {
         var registry = new SchemaRegistry('memory');
-        var testSchema = registry.getSchema('t');
-        testSchema.extendModel('t', {
+        var testSchema = {
             title: String,
             test: String
-        });
-        registry.add('t', testSchema, function(success) {
-            registry.remove('t', function(success) {
-                test.ok(success, 'Should have removed the schema from the registry');
-                registry.log(function(schemas) {
-                    console.log(JSON.stringify(schemas));
-                    test.done();
-                });
+        };
+        registry.add('t', testSchema, function(model) {
+            registry.getSchema('t', function(t) {
+                if (!_.isNull(t) && !_.isUndefined(t)) {
+                    t.testMethod = function() {
+                        return true;
+                    }
+                    registry.add('t', t, function(success) {
+                        registry.getSchema('t', function(t2) {
+                            console.log(t2);
+                            test.ok(t2.testMethod(), "Test method should return true.")
+                            test.done();
+                        });
+                    });
+                } else {
+                    test.ok(false, "Schema should not have been null.");
+                }
             });
+        });
+        test.done();
+    },
+    'testRemove': function(test) {
+        var registry = new SchemaRegistry('memory');
+        var testSchema = {
+            title: String,
+            test: String
+        };
+        registry.add('t', testSchema, function(success) {
+            registry.add('t2', testSchema, function(success) {
+                registry.remove('t', function(success) {
+                    test.ok(_.size(registry.schemas) == 1, 'Should have removed the schema from the registry');
+                    registry.log(function(schemas) {
+                        console.log(JSON.stringify(schemas));
+                        test.done();
+                    });
+                });
+            })
         });
     },
     'testKeys': function(test) {
         var registry = new SchemaRegistry('memory');
-        var t1 = registry.getSchema('t1');
-        t1.extendModel('t1', {
-        });
-        var t2 = registry.getSchema('t2');
-        t2.extendModel('t2', {});
-        
-        var t3 = registry.getSchema('t3');
-        t3.extendModel('t3', {});
-        
+        var t1 = {
+            title: String,
+            test: String
+        };
+        var t2 = {
+            title: String,
+            test: String
+        };
+        var t3 = {
+            title: String,
+            test: String
+        };        
         registry.add('t1', t1, function(success) {
             registry.add('t2', t2, function(success) {
                 registry.add('t3', t3, function(success) {
-                    registry.getKeys(function(keys) {
+                    registry.getSchemaNames(function(keys) {
                         var testArray = ['t1', 't2', 't3'];
                         test.deepEqual(testArray, keys);
                         test.done();
