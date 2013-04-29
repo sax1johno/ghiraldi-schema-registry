@@ -48,6 +48,7 @@ exports.registryTest = nodeunit.testCase({
         test.done();
     },
     'testRemove': function(test) {
+        console.log("Test remove");
         var registry = new SchemaRegistry('memory');
         var testSchema = {
             title: String,
@@ -56,7 +57,9 @@ exports.registryTest = nodeunit.testCase({
         registry.add('t', testSchema, function(success) {
             registry.add('t2', testSchema, function(success) {
                 registry.remove('t', function(success) {
-                    test.ok(_.size(registry.schemas) == 1, 'Should have removed the schema from the registry');
+                    // test.ok(_.size(registry.schemas) == 1, 'Should have removed the schema from the registry');
+                    console.log("schema names = " + JSON.stringify(registry.getSchemaNames()));
+                    test.ok(_.size(registry.getSchemaNames()) == 1, 'Should have removed the schema from the registry');
                     registry.log(function(schemas) {
                         console.log(JSON.stringify(schemas));
                         test.done();
@@ -64,31 +67,5 @@ exports.registryTest = nodeunit.testCase({
                 });
             })
         });
-    },
-    'testKeys': function(test) {
-        var registry = new SchemaRegistry('memory');
-        var t1 = {
-            title: String,
-            test: String
-        };
-        var t2 = {
-            title: String,
-            test: String
-        };
-        var t3 = {
-            title: String,
-            test: String
-        };        
-        registry.add('t1', t1, function(success) {
-            registry.add('t2', t2, function(success) {
-                registry.add('t3', t3, function(success) {
-                    registry.getSchemaNames(function(keys) {
-                        var testArray = ['t1', 't2', 't3'];
-                        test.deepEqual(testArray, keys);
-                        test.done();
-                    })
-                })
-            })
-        })
     }
 });
