@@ -7,7 +7,7 @@
     "registry",
     "ghiraldi"
   ],
-  "version": "0.0.6",
+  "version": "0.0.10",
   "author": {
     "name": "John O'Connor",
     "email": "sax1johno@gmail.com"
@@ -26,7 +26,7 @@
     "type": "git",
     "url": "github.com/sax1johno/ghiraldi-schema-registry.git"
   },
-  "_id": "ghiraldi-schema-registry@0.0.6",
+  "_id": "ghiraldi-schema-registry@0.0.10",
   "_from": "ghiraldi-schema-registry@*",
   "readme": "ghiraldi-schema-registry\n========================\n\nCreates a schema registry that can be used to store and retrieve Ghiraldi schemas.",
   "dist": {
