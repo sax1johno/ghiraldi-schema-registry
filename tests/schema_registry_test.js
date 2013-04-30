@@ -18,8 +18,8 @@ exports.registryTest = nodeunit.testCase({
             registry.log(function(schemas) {
                 console.log(JSON.stringify(schemas));
                 test.done();                
-            })
-        })
+            });
+        });
     },
     'testGetAndModify': function(test) {
         var registry = new SchemaRegistry('memory');
@@ -32,11 +32,11 @@ exports.registryTest = nodeunit.testCase({
                 if (!_.isNull(t) && !_.isUndefined(t)) {
                     t.testMethod = function() {
                         return true;
-                    }
+                    };
                     registry.add('t', t, function(success) {
                         registry.getSchema('t', function(t2) {
                             console.log(t2);
-                            test.ok(t2.testMethod(), "Test method should return true.")
+                            test.ok(t2.testMethod(), "Test method should return true.");
                             test.done();
                         });
                     });
@@ -65,7 +65,7 @@ exports.registryTest = nodeunit.testCase({
                         test.done();
                     });
                 });
-            })
+            });
         });
     }
 });
