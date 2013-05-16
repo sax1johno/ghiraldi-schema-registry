@@ -1,6 +1,7 @@
 var nodeunit = require('nodeunit'),
     SchemaRegistry = require('../lib/schema_registry'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    util = require('util');
     
 exports.registryTest = nodeunit.testCase({
     'testConstructor': function(test) {
@@ -47,6 +48,32 @@ exports.registryTest = nodeunit.testCase({
         });
         test.done();
     },
+    'testModel': function(test) {
+        var registry = new SchemaRegistry('memory');
+        var testSchema = {
+            title: String,
+            test: String
+        };
+        registry.add('t', testSchema, function(model) {
+            registry.getSchema('t', function(t) {
+                if (!_.isNull(t) && !_.isUndefined(t)) {
+                    t.testMethod = function() {
+                        return true;
+                    };
+                    registry.add('t', t, function(success) {
+                        registry.register('t');
+                        var testModel = registry.getModel('t');
+                        console.log("model = " + util.inspect(testModel));
+                        test.ok(true, "Test method should return true.");
+                        test.done();
+                    });
+                } else {
+                    test.ok(false, "Schema should not have been null.");
+                }
+            });
+        });
+        test.done();
+    },    
     'testRemove': function(test) {
         console.log("Test remove");
         var registry = new SchemaRegistry('memory');
